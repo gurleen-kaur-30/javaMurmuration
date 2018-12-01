@@ -14,7 +14,7 @@ public class TestFlock {
 
 		// repeat the above for the different derived classes of bird
 		Bird b1 = new BirdX(); // where BirdX is a derived concrete class of Bird
-		// b1.setPos(500,500);
+		b1.setPos(10,10);
 		f.addBird(b1);
 		
 		for(int i=0;i<5;i++){
@@ -32,7 +32,7 @@ public class TestFlock {
 		app.init(f);
 		
 		app.setLeader(b1);
-		// app.setTarget(800,300);
+		app.setTarget(800,300);
 	
 		/*
 		try {

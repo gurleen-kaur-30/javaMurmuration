@@ -35,7 +35,7 @@ abstract public class Bird {
 		target.setPos(xt, yt);
 	}
 
-	protected Position getTarget() {
+	public Position getTarget() {
 		return target;
 	}
 

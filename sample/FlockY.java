@@ -1,66 +1,54 @@
 package sample;
-
 import flockbase.Bird;
 import flockbase.Flock;
-import flockbase.Position;
-import sample.BirdX;
-import java.util.*;
-import java.lang.*;
-import java.io.*;
-
-public class FlockY extends Flock
-{
-    public Bird getLeader()
-    {
-        return leader;
-    }
-
-    public void setLeader(Bird b)
-    {
-        if(leader != null)
-            leader.retireLead();
-        leader = b;
-        leader.becomeLeader();
-    }
-
-    public void addBird(Bird b)
-    {
-        birds.add(b);
-        b.setFlock(this);
-    }
-
-    public ArrayList<Bird> getBirds()
-    {
-        return birds;
-    }
-
-    public Flock split(int pos)
-    {
-        FlockY myBirds = new FlockY();
-        Bird bird = birds.get(pos);
-        bird.becomeLeader();
-        myBirds.addBird(bird);
-        myBirds.setLeader(bird);
-        birds.remove(pos);
-        for(int i = 0; i < pos; i++)
-            myBirds.addBird(birds.get(i));
-        for(int i = 0; i < pos-1; i++)
-            birds.remove(i);
-        return myBirds;
-    }
-
-    public void joinFlock(Flock f)
-    { getLeader().retireLead();
-    for (Bird bird : getBirds()) {
-      f.addBird(bird);
-    }
-
-        
-    }
+import java.util.ArrayList;
 
 
-
+public class FlockY extends Flock{
+    private Bird leader;
     private ArrayList<Bird> birds = new ArrayList<Bird>();
-    Bird leader;
+
+    protected void Flock() {
+    }
+
+	public void addBird(Bird b){
+        this.birds.add(b);
+        b.setFlock((Flock)this);
+    }
+
+	public void setLeader(Bird leader){
+        leader.becomeLeader();
+        this.leader = leader;
+    }
+
+	public ArrayList<Bird> getBirds(){
+        return this.birds;
+    }
+
+
+	public Bird getLeader(){
+        return this.leader;
+    }
+	
+	public Flock split(int pos){
+        FlockY newFlock = new FlockY();
+        int leaderX = this.leader.getTarget().getX();
+        int leaderY = this.leader.getTarget().getY();
+        for(int i=pos;i<this.birds.size();i++){
+            newFlock.addBird(this.birds.get(i));
+        }
+        newFlock.getBirds().get(0).setTarget(leaderX,leaderY);
+        newFlock.getBirds().get(0).setPos(leaderX,leaderY);
+        newFlock.setLeader(newFlock.getBirds().get(0));
+        this.birds.subList(pos,this.birds.size()).clear();
+        return newFlock;
+    } 
+
+	public void joinFlock(Flock f){
+        for(int i=0;i<this.getBirds().size();i++) f.addBird(this.getBirds().get(i));
+        this.getLeader().retireLead();
+        f.getBirds().get(0).becomeLeader();
+        this.birds.clear();
+    } 
 
 }
